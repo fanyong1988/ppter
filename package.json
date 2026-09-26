@@ -1,0 +1,37 @@
+{
+  "name": "ppt-image-generator",
+  "version": "2.1.0",
+  "description": "ppter ppt - 本地开源 PPT 配图工具，用 APIMart 写提示词并生成图片",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fanyong1988/ppter.git"
+  },
+  "main": "server.js",
+  "bin": {
+    "ppt-image-cli": "scripts/codex-cli.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "start:smart": "node scripts/start.js",
+    "cli": "node scripts/codex-cli.js",
+    "start:mac": "./start-server.command",
+    "start:win": "start-server.bat",
+    "start:linux": "./start-server.sh",
+    "check": "node --check server.js && node --check public/app.js && node --check public/batch-runner.js && node --check public/prompt-parser.js && node --check public/prompt-templates.js && node --check scripts/codex-cli.js && node --check scripts/start.js && node --check scripts/create-share-package.js",
+    "test": "node --test",
+    "package:share": "node scripts/create-share-package.js",
+    "release:patch": "npm version patch --no-git-tag-version",
+    "release:minor": "npm version minor --no-git-tag-version",
+    "release:major": "npm version major --no-git-tag-version"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "fflate": "^0.8.2",
+    "jspdf": "^4.2.1",
+    "lucide-static": "^1.26.0"
+  }
+}

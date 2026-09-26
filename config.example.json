@@ -1,0 +1,8 @@
+{
+  "imageApiBase": "https://api.apimart.ai",
+  "imageApiKey": "",
+  "imageProvider": "apimart",
+  "imageModel": "gpt-image-2-official",
+  "textModel": "gpt-5.2-pro",
+  "imageSize": "16:9"
+}

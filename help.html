@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>产品功能讲解 - ppter ppt</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .help-page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+    .help-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .help-topbar h1 {
+      font-size: 22px;
+      margin: 0;
+    }
+    .help-section {
+      margin-bottom: 36px;
+    }
+    .help-section h2 {
+      font-size: 17px;
+      margin: 0 0 12px;
+    }
+    .help-section p {
+      color: #4b5563;
+      line-height: 1.7;
+      margin: 0 0 10px;
+    }
+    .help-section textarea {
+      width: 100%;
+      min-height: 260px;
+      box-sizing: border-box;
+    }
+    .flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .flow-lane {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+    .flow-lane + .flow-lane {
+      margin-top: 0;
+    }
+    .flow-lane.lane-outside {
+      border-color: #f59e0b44;
+      background: #fffbeb;
+    }
+    .flow-lane.lane-inside {
+      border-color: #2563eb33;
+      background: #eff6ff;
+    }
+    .flow-lane-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+    .flow-lane.lane-outside .flow-lane-title { color: #b45309; }
+    .flow-lane.lane-inside .flow-lane-title { color: #1d4ed8; }
+    .flow-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .flow-node-num {
+      flex: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #1c2430;
+      color: #fff;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .flow-node strong { display: block; font-size: 14px; margin-bottom: 2px; }
+    .flow-node span { font-size: 13px; color: #4b5563; line-height: 1.5; }
+    .flow-arrow {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 18px;
+      line-height: 1;
+      padding: 6px 0;
+    }
+    .flow-gap {
+      height: 14px;
+    }
+    .faq-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #4b5563;
+      line-height: 1.9;
+      font-size: 14px;
+    }
+    .faq-list a { color: #1d4ed8; }
+    code {
+      background: #f3f4f6;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="help-page">
+    <div class="help-topbar">
+      <h1>产品功能讲解</h1>
+      <a class="btn btn-secondary" href="/">
+        <img src="/vendor/lucide/arrow-left.svg" alt="">返回工作台
+      </a>
+    </div>
+
+    <section class="help-section">
+      <h2>这个工具做什么</h2>
+      <p>
+        ppter 把一套演示做成风格统一的图片页。你在这个工作台里说清楚要讲什么，选择文本模型，和模型把页数、受众和风格问清楚，再生成每一页的提示词，然后逐页出图，最后导出 PPTX。
+        文本和图片都走 <a href="https://docs.apimart.ai/cn" target="_blank" rel="noreferrer">APIMart 文档</a>里的接口，使用你自己的 Key。Key 只保存在这台电脑。
+      </p>
+    </section>
+
+    <section class="help-section">
+      <h2>同一个页面里的三步</h2>
+      <p>
+        顶部的「写提示词」「逐页生成」「导出 PPTX」是同一页里的三个面板。写提示词使用
+        <a href="https://docs.apimart.ai/cn/api-reference/texts/openai/responses" target="_blank" rel="noreferrer">OpenAI Responses</a>。
+        模型可选 <code>gpt-5.2-pro</code> 或 <code>qwen3.8-max</code>。页数、受众、风格或必须保留的事实不清楚时，模型会先追问。
+        点击「生成详细提示词」后，在右侧核对每一页，再进入逐页生成。已经写好的提示词可以展开「粘贴已有提示词」直接使用。
+      </p>
+      <div class="flow">
+        <div class="flow-lane lane-inside">
+          <div class="flow-lane-title">在本工具中完成</div>
+          <div class="flow-node">
+            <span class="flow-node-num">1</span>
+            <div><strong>写下意图</strong><span>说明主题、受众、页数和必须保留的事实。材料不够时，模型会先追问。</span></div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node">
+            <span class="flow-node-num">2</span>
+            <div><strong>生成详细提示词</strong><span>确认分页预览后进入逐页生成。每页之间使用单独一行的 <code>&lt;!-- PAGE --&gt;</code>。</span></div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node">
+            <span class="flow-node-num">3</span>
+            <div><strong>逐页生成</strong><span>修改提示词、增删页面、选择风格和清晰度，然后批量生成。</span></div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-node">
+            <span class="flow-node-num">4</span>
+            <div><strong>导出 PPTX</strong><span>下载整页图片型演示文稿。同页也可以下载 PDF 或按页码整理的图片包。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="help-section">
+      <h2>可选：提示词写法模板</h2>
+      <div class="panel-actions" style="margin-bottom: 8px;">
+        <span class="preview-meta">工作台里的模型按这个结构写每一页。需要对照格式时可以复制。</span>
+        <button class="btn btn-small btn-secondary" id="copyBasePromptBtn" type="button">
+          <img src="/vendor/lucide/copy.svg" alt="">复制模板
+        </button>
+      </div>
+      <textarea class="textarea code-area" id="basePromptText" readonly></textarea>
+    </section>
+
+    <section class="help-section">
+      <h2>三页示范（AI 应该返回的格式）</h2>
+      <div class="panel-actions" style="margin-bottom: 8px;">
+        <span class="preview-meta">也可以直接粘贴到主页体验完整流程</span>
+        <button class="btn btn-small btn-secondary" id="copyExampleBtn" type="button">
+          <img src="/vendor/lucide/copy.svg" alt="">复制示范
+        </button>
+      </div>
+      <textarea class="textarea code-area" id="examplePromptText" readonly></textarea>
+    </section>
+
+    <section class="help-section">
+      <h2>常见问题</h2>
+      <ul class="faq-list">
+        <li>写提示词和生图使用同一把 APIMart Key：在工作台左侧底部「配置 APIMart」中填写；<a href="https://apimart.ai/zh" target="_blank" rel="noreferrer">获取 Key / 充值</a>。开源仓库不包含任何人的 Key。</li>
+        <li>文本模型走 <a href="https://docs.apimart.ai/cn/api-reference/texts/openai/responses" target="_blank" rel="noreferrer">Responses 接口</a>，默认 <code>gpt-5.2-pro</code>。图片模型固定为 GPT Image 2 官方渠道，详见 <a href="https://docs.apimart.ai/cn/api-reference/images/gpt-image-2/official" target="_blank" rel="noreferrer">图片接口文档</a>。</li>
+        <li>左侧「历史项目」可以删除。删除会移除该项目的页面和对话，并删除它引用的本地图片。</li>
+        <li>也可以让 Codex、Claude Code 等命令行工具调用 <code>node scripts/codex-cli.js batch ...</code> 直接写入分页提示词，再打开页面人工确认后生成。</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/prompt-templates.js"></script>
+  <script>
+    (function () {
+      const toast = document.getElementById('toast');
+      let toastTimer = null;
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.className = 'toast show success';
+        toastTimer = setTimeout(() => { toast.className = 'toast'; }, 2600);
+      }
+      async function copyText(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch {
+          const textarea = document.createElement('textarea');
+          textarea.value = value;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          textarea.remove();
+        }
+        showToast('已复制到剪贴板');
+      }
+      const templates = window.PPTER_TEMPLATES || {};
+      document.getElementById('basePromptText').value = templates.BASE_PROMPT || '';
+      document.getElementById('examplePromptText').value = templates.EXAMPLE_PROMPTS || '';
+      document.getElementById('copyBasePromptBtn').addEventListener('click', () => copyText(templates.BASE_PROMPT || ''));
+      document.getElementById('copyExampleBtn').addEventListener('click', () => copyText(templates.EXAMPLE_PROMPTS || ''));
+    })();
+  </script>
+</body>
+</html>

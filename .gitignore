@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.DS_Store
+.claude/
+.playwright-mcp/
+
+# Local runtime data. Keep generated user content out of version control.
+data/
+assets/
+ppt_images/
+
+# Logs and temporary files.
+*.log
+*.tmp

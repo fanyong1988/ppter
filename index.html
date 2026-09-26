@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>ppter ppt</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-workspace-view="prompt">
+  <div class="app-shell">
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    <aside class="project-sidebar" id="projectSidebar" aria-label="PPT 项目">
+      <div class="sidebar-brand">
+        <div class="brand-mark" aria-hidden="true">P</div>
+        <div class="brand-copy">
+          <h1 class="brand-title">ppter ppt</h1>
+          <span class="brand-version" id="versionBadge">v2.1.0</span>
+        </div>
+        <button class="icon-btn sidebar-close" id="sidebarCloseBtn" type="button" aria-label="关闭项目列表">
+          <img src="/vendor/lucide/x.svg" alt="">
+        </button>
+      </div>
+
+      <button class="btn btn-new-project" id="newProjectBtn" type="button">
+        <img src="/vendor/lucide/plus.svg" alt="">
+        新建 PPT
+      </button>
+
+      <div class="sidebar-section-head">
+        <span>历史项目</span>
+        <span class="project-count" id="projectCount">0</span>
+      </div>
+      <nav class="project-list" id="projectList" aria-label="PPT 项目列表"></nav>
+
+      <div class="sidebar-footer">
+        <button class="sidebar-setting api-state" id="apiSettingsBtn" type="button">
+          <img src="/vendor/lucide/key-round.svg" alt="">
+          <span id="apiStateText">配置 APIMart</span>
+          <img class="setting-chevron" src="/vendor/lucide/chevron-right.svg" alt="">
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="project-header">
+        <button class="icon-btn sidebar-toggle" id="sidebarToggleBtn" type="button" aria-label="打开项目列表">
+          <img src="/vendor/lucide/panel-left.svg" alt="">
+        </button>
+        <div class="project-heading">
+          <label class="hidden" for="projectName">PPT 名称</label>
+          <input class="project-name-input" id="projectName" type="text" maxlength="80" placeholder="未命名 PPT">
+          <span class="save-state" id="saveState">已保存</span>
+        </div>
+        <span class="project-progress" id="progressSummary">0 个页面</span>
+        <button class="btn btn-secondary btn-help" id="helpBtn" type="button">
+          <img src="/vendor/lucide/circle-help.svg" alt="">功能讲解
+        </button>
+      </header>
+
+      <nav class="workflow-band" aria-label="PPT 制作流程">
+        <button class="workflow-step active" id="workflowStep1" type="button" data-workspace-view="prompt">
+          <span class="step-number">1</span><span class="step-label">写提示词</span>
+        </button>
+        <button class="workflow-step" id="workflowStep2" type="button" data-workspace-view="generate">
+          <span class="step-number">2</span><span class="step-label">逐页生成</span>
+        </button>
+        <button class="workflow-step" id="workflowStep3" type="button" data-workspace-view="export">
+          <span class="step-number">3</span><span class="step-label">导出 PPTX</span>
+        </button>
+      </nav>
+
+      <main class="workspace" id="mainWorkspace">
+        <section class="workspace-panel prompt-workspace" data-workspace-panel="prompt">
+          <div class="stage-heading">
+            <div>
+              <span class="stage-kicker">第 1 步</span>
+              <h2>写提示词</h2>
+            </div>
+            <div class="stage-actions">
+              <label class="compact-label" for="textModel">文本模型
+                <select class="select" id="textModel">
+                  <option value="gpt-5.2-pro">gpt-5.2-pro</option>
+                  <option value="qwen3.8-max">qwen3.8-max</option>
+                </select>
+              </label>
+              <button class="btn btn-secondary" id="pasteImportExampleBtn" type="button">导入三页示范</button>
+            </div>
+          </div>
+          <div class="prompt-layout">
+            <div class="chat-panel">
+              <div class="chat-log" id="chatLog" aria-live="polite"></div>
+              <div class="chat-composer">
+                <label class="editor-label" for="chatInput">制作意图</label>
+                <textarea class="textarea" id="chatInput" placeholder="例如：给管理层讲一套 8 页的矿山安全培训介绍，风格要专业克制，不要编造数据。"></textarea>
+                <div class="chat-actions">
+                  <span class="preview-meta">Ctrl + Enter 发送。材料不够时，模型会先追问。</span>
+                  <button class="btn btn-secondary" id="sendChatBtn" type="button">发送</button>
+                  <button class="btn btn-primary" id="finalizePromptsBtn" type="button">生成详细提示词</button>
+                </div>
+              </div>
+            </div>
+            <aside class="prompt-side">
+              <h3>分页预览</h3>
+              <div id="promptPreview"></div>
+              <button class="btn btn-primary prompt-next" id="usePromptsBtn" type="button" disabled>
+                进入逐页生成<img src="/vendor/lucide/arrow-right.svg" alt="">
+              </button>
+              <details class="paste-details">
+                <summary>粘贴已有提示词</summary>
+                <label class="editor-label" for="pastePromptText">已有的分页提示词，页与页之间用 &lt;!-- PAGE --&gt; 分隔</label>
+                <textarea class="textarea paste-textarea" id="pastePromptText" placeholder="在这里粘贴已经写好的分页提示词..."></textarea>
+                <button class="btn btn-secondary" id="parseAndNextBtn" type="button">解析并使用</button>
+              </details>
+              <a class="help-link" href="/help.html">查看功能讲解</a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="workspace-panel" data-workspace-panel="generate">
+          <div class="stage-heading generate-heading">
+            <div>
+              <span class="stage-kicker">第 2 步</span>
+              <h2>逐页生成</h2>
+            </div>
+            <div class="stage-actions">
+              <button class="btn btn-secondary" id="openImportBtn" type="button">
+                <img src="/vendor/lucide/clipboard-paste.svg" alt="">补充导入
+              </button>
+              <button class="btn btn-secondary" id="addPageBtn" type="button">
+                <img src="/vendor/lucide/plus.svg" alt="">添加页面
+              </button>
+              <button class="btn btn-primary" id="batchGenerateBtn" type="button">
+                <img src="/vendor/lucide/play.svg" alt="">批量生成
+              </button>
+            </div>
+          </div>
+          <div class="generation-settings">
+            <label class="compact-label" for="stylePreset">视觉风格
+              <select class="select" id="stylePreset">
+                <option value="consulting">咨询报告</option>
+                <option value="minimal">极简发布会</option>
+                <option value="tech">科技企业</option>
+                <option value="warm">温暖插画</option>
+                <option value="custom">自定义</option>
+              </select>
+            </label>
+            <label class="compact-label hidden" id="customStyleWrap" for="customStyleInput">风格描述
+              <input class="field custom-style-field" id="customStyleInput" type="text" maxlength="240" placeholder="例如：水墨国风、红金配色">
+            </label>
+            <label class="compact-label" for="resolution">清晰度
+              <select class="select" id="resolution">
+                <option value="1k">标准 1K</option>
+                <option value="2k">高清 2K</option>
+                <option value="4k">超清 4K</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="workspace-panel export-workspace" data-workspace-panel="export">
+          <div class="stage-heading">
+            <div>
+              <span class="stage-kicker">第 3 步</span>
+              <h2>导出 PPTX</h2>
+            </div>
+            <span class="export-summary" id="exportSummary">尚无可下载图片</span>
+          </div>
+          <div class="export-grid" id="exportGrid">
+            <div class="export-option">
+              <img src="/vendor/lucide/images.svg" alt="">
+              <div><strong>图片包</strong><span>按页码整理的 ZIP</span></div>
+              <button class="btn btn-secondary" id="exportImagesBtn" type="button">下载 ZIP</button>
+            </div>
+            <div class="export-option">
+              <img src="/vendor/lucide/file-text.svg" alt="">
+              <div><strong>PDF</strong><span>直接阅读或打印</span></div>
+              <button class="btn btn-secondary" id="exportPdfBtn" type="button">下载 PDF</button>
+            </div>
+            <div class="export-option">
+              <img src="/vendor/lucide/presentation.svg" alt="">
+              <div><strong>PPTX</strong><span>可继续编辑的演示文稿</span></div>
+              <button class="btn btn-primary" id="exportPptBtn" type="button">下载 PPTX</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="review-notice hidden" id="reviewNotice">
+          <img class="status-icon" src="/vendor/lucide/clipboard-check.svg" alt="">
+          <span>这些提示词由命令行导入，请检查后再开始生成。</span>
+          <button class="btn btn-small btn-secondary" id="confirmReviewBtn" type="button">确认提示词</button>
+        </section>
+
+        <section class="page-list" id="pageList" aria-live="polite"></section>
+
+        <section class="empty-state" id="emptyState">
+          <div class="empty-state-inner">
+            <img class="empty-icon" src="/vendor/lucide/panels-top-left.svg" alt="">
+            <h2>还没有分页</h2>
+            <p>先在「写提示词」里整理每一页，或直接添加一个空白页面。</p>
+            <div class="empty-actions">
+              <button class="btn btn-primary" id="emptyStateImportBtn" type="button">
+                <img src="/vendor/lucide/sparkles.svg" alt="">去写提示词
+              </button>
+              <button class="btn btn-secondary" id="emptyStateAddBtn" type="button">添加空白页</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="importModal" role="dialog" aria-modal="true" aria-labelledby="importModalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="importModalTitle">粘贴 AI 结果</h2>
+        <button class="icon-btn" type="button" data-close-modal="importModal" aria-label="关闭">
+          <img src="/vendor/lucide/x.svg" alt="">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="panel-actions">
+          <h3>粘贴 AI 返回的全部内容</h3>
+          <span class="preview-meta">优先识别 &lt;!-- PAGE --&gt;</span>
+        </div>
+        <textarea class="textarea paste-area" id="modalPasteText" placeholder="在这里粘贴 Claude 或 OpenClaw 生成的分页提示词..."></textarea>
+        <div class="parse-actions">
+          <button class="btn btn-secondary" id="parsePromptsBtn" type="button">解析分页</button>
+        </div>
+        <div class="preview-list" id="importPreviewList"></div>
+      </div>
+      <div class="modal-foot">
+        <label class="check-row" for="appendImport">
+          <input id="appendImport" type="checkbox">
+          追加到现有页面
+        </label>
+        <button class="btn btn-secondary" type="button" data-close-modal="importModal">取消</button>
+        <button class="btn btn-primary" id="confirmImportBtn" type="button" disabled>导入页面</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="apiModal" role="dialog" aria-modal="true" aria-labelledby="apiModalTitle">
+    <div class="modal small">
+      <div class="modal-head">
+        <h2 id="apiModalTitle">APIMart 配置</h2>
+        <button class="icon-btn" type="button" data-close-modal="apiModal" aria-label="关闭">
+          <img src="/vendor/lucide/x.svg" alt="">
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="info-panel">
+          <img class="status-icon" src="/vendor/lucide/shield-check.svg" alt="">
+          <span>Key 只保存在这台电脑的本地数据目录中。</span>
+        </div>
+        <div class="form-row">
+          <label for="apiKeyInput">API Key</label>
+          <input class="field" id="apiKeyInput" type="password" autocomplete="off" placeholder="输入新的 APIMart API Key">
+          <p class="form-help" id="apiConfigHelp">同一把 Key 用于写提示词和生成图片。图片模型固定为 GPT Image 2 官方渠道。</p>
+        </div>
+        <div class="link-row">
+          <a href="https://docs.apimart.ai/cn/api-reference/texts/openai/responses" target="_blank" rel="noreferrer">文本 Responses 文档</a>
+          <a href="https://docs.apimart.ai/cn/api-reference/images/gpt-image-2/official" target="_blank" rel="noreferrer">图片接口文档</a>
+          <a href="https://apimart.ai/zh" target="_blank" rel="noreferrer">获取 Key / 充值</a>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-danger hidden" id="clearApiKeyBtn" type="button">清空 Key</button>
+        <button class="btn btn-secondary" type="button" data-close-modal="apiModal">取消</button>
+        <button class="btn btn-primary" id="saveApiKeyBtn" type="button">保存配置</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="imagePreviewModal" role="dialog" aria-modal="true" aria-label="图片预览">
+    <div class="image-preview">
+      <img id="imagePreview" alt="生成结果预览">
+      <button class="icon-btn" type="button" data-close-modal="imagePreviewModal" aria-label="关闭预览">
+        <img src="/vendor/lucide/x.svg" alt="">
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/vendor/fflate/index.js"></script>
+  <script src="/vendor/jspdf/jspdf.umd.min.js"></script>
+  <script src="/prompt-templates.js"></script>
+  <script src="/prompt-parser.js"></script>
+  <script src="/batch-runner.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
